@@ -14,15 +14,15 @@ function getSignInErrorMessage(message: string): string {
   const normalizedMessage = message.toLowerCase();
 
   if (normalizedMessage.includes("invalid login credentials")) {
-    return "Email hoặc mật khẩu chưa đúng. Vui lòng kiểm tra lại.";
+    return "Email ho\u1eb7c m\u1eadt kh\u1ea9u ch\u01b0a \u0111\u00fang. Vui l\u00f2ng ki\u1ec3m tra l\u1ea1i.";
   }
 
   if (normalizedMessage.includes("email not confirmed")) {
-    return "Tài khoản chưa xác nhận email. Hãy kiểm tra hộp thư trước khi đăng nhập.";
+    return "T\u00e0i kho\u1ea3n ch\u01b0a x\u00e1c nh\u1eadn email. H\u00e3y ki\u1ec3m tra h\u1ed9p th\u01b0 tr\u01b0\u1edbc khi \u0111\u0103ng nh\u1eadp.";
   }
 
   if (normalizedMessage.includes("rate limit")) {
-    return "Bạn thao tác hơi nhanh. Vui lòng thử lại sau ít phút.";
+    return "B\u1ea1n thao t\u00e1c h\u01a1i nhanh. Vui l\u00f2ng th\u1eed l\u1ea1i sau \u00edt ph\u00fat.";
   }
 
   return message;
@@ -43,7 +43,7 @@ export default function LoginPage() {
     const password = String(formData.get("password") ?? "");
 
     if (!email || !password) {
-      setError("Vui lòng nhập đầy đủ email và mật khẩu.");
+      setError("Vui l\u00f2ng nh\u1eadp \u0111\u1ea7y \u0111\u1ee7 email v\u00e0 m\u1eadt kh\u1ea9u.");
       setIsLoading(false);
       return;
     }
@@ -72,10 +72,10 @@ export default function LoginPage() {
           <div className="space-y-2">
             <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               <Sparkles className="h-3.5 w-3.5" />
-              Mood board ghi chú
+              Mood board ghi ch&#250;
             </div>
-            <CardTitle>Đăng nhập</CardTitle>
-            <CardDescription>Truy cập không gian ghi chú cá nhân của bạn.</CardDescription>
+            <CardTitle>&#272;&#259;ng nh&#7853;p</CardTitle>
+            <CardDescription>Truy c&#7853;p kh&#244;ng gian ghi ch&#250; c&#225; nh&#226;n c&#7911;a b&#7841;n.</CardDescription>
           </div>
         </CardHeader>
         <CardContent>
@@ -85,7 +85,7 @@ export default function LoginPage() {
               <Input id="email" name="email" required type="email" placeholder="name@example.com" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Mật khẩu</Label>
+              <Label htmlFor="password">M&#7853;t kh&#7849;u</Label>
               <Input id="password" name="password" required type="password" />
             </div>
             {error ? (
@@ -94,13 +94,13 @@ export default function LoginPage() {
               </p>
             ) : null}
             <Button className="w-full" disabled={isLoading} type="submit">
-              {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {isLoading ? "\u0110ang \u0111\u0103ng nh\u1eadp..." : "\u0110\u0103ng nh\u1eadp"}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Chưa có tài khoản?{" "}
+            Ch&#432;a c&#243; t&#224;i kho&#7843;n?{" "}
             <Link className="font-medium text-primary underline-offset-4 hover:underline" href="/register">
-              Đăng ký
+              &#272;&#259;ng k&#253;
             </Link>
           </p>
         </CardContent>

@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { MailCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,24 +13,30 @@ function getSignUpErrorMessage(message: string, code?: string): string {
   const normalizedMessage = message.toLowerCase();
 
   if (code === "over_email_send_rate_limit" || normalizedMessage.includes("rate limit")) {
-    return "Supabase đang giới hạn gửi email xác nhận. Vui lòng thử lại sau ít phút hoặc tắt Confirm email trong Supabase Auth khi test local.";
+    return "Supabase \u0111ang gi\u1edbi h\u1ea1n g\u1eedi email x\u00e1c nh\u1eadn. Vui l\u00f2ng th\u1eed l\u1ea1i sau \u00edt ph\u00fat.";
   }
 
   if (normalizedMessage.includes("invalid")) {
-    return "Email hoặc mật khẩu không hợp lệ.";
+    return "Email ho\u1eb7c m\u1eadt kh\u1ea9u kh\u00f4ng h\u1ee3p l\u1ec7.";
   }
 
   if (normalizedMessage.includes("already")) {
-    return "Email này đã được đăng ký. Hãy đăng nhập hoặc dùng email khác.";
+    return "Email n\u00e0y \u0111\u00e3 \u0111\u01b0\u1ee3c \u0111\u0103ng k\u00fd. H\u00e3y \u0111\u0103ng nh\u1eadp ho\u1eb7c d\u00f9ng email kh\u00e1c.";
   }
 
   return message;
 }
 
+function getRedirectUrl() {
+  return `${window.location.origin}/login`;
+}
+
 export default function RegisterPage() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [lastEmail, setLastEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -44,19 +50,19 @@ export default function RegisterPage() {
     const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
     if (!email || !password || !confirmPassword) {
-      setError("Vui lòng nhập đầy đủ thông tin đăng ký.");
+      setError("Vui l\u00f2ng nh\u1eadp \u0111\u1ea7y \u0111\u1ee7 th\u00f4ng tin \u0111\u0103ng k\u00fd.");
       setIsLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError("Mật khẩu phải có ít nhất 6 ký tự.");
+      setError("M\u1eadt kh\u1ea9u ph\u1ea3i c\u00f3 \u00edt nh\u1ea5t 6 k\u00fd t\u1ef1.");
       setIsLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Mật khẩu xác nhận không khớp.");
+      setError("M\u1eadt kh\u1ea9u x\u00e1c nh\u1eadn kh\u00f4ng kh\u1edbp.");
       setIsLoading(false);
       return;
     }
@@ -66,7 +72,7 @@ export default function RegisterPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/login`
+        emailRedirectTo: getRedirectUrl()
       }
     });
     setIsLoading(false);
@@ -76,7 +82,37 @@ export default function RegisterPage() {
       return;
     }
 
-    setMessage("Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.");
+    setLastEmail(email);
+    setMessage("T\u1ea1o t\u00e0i kho\u1ea3n th\u00e0nh c\u00f4ng. H\u00e3y ki\u1ec3m tra Inbox ho\u1eb7c Spam \u0111\u1ec3 x\u00e1c nh\u1eadn email.");
+  }
+
+  async function handleResendConfirmation() {
+    if (!lastEmail) {
+      setError("H\u00e3y nh\u1eadp v\u00e0 \u0111\u0103ng k\u00fd email tr\u01b0\u1edbc khi g\u1eedi l\u1ea1i x\u00e1c nh\u1eadn.");
+      return;
+    }
+
+    setError("");
+    setMessage("");
+    setIsResending(true);
+
+    const supabase = createClient();
+    const { error: resendError } = await supabase.auth.resend({
+      type: "signup",
+      email: lastEmail,
+      options: {
+        emailRedirectTo: getRedirectUrl()
+      }
+    });
+
+    setIsResending(false);
+
+    if (resendError) {
+      setError(getSignUpErrorMessage(resendError.message, resendError.code));
+      return;
+    }
+
+    setMessage("Email x\u00e1c nh\u1eadn \u0111\u00e3 \u0111\u01b0\u1ee3c g\u1eedi l\u1ea1i. H\u00e3y ki\u1ec3m tra Inbox ho\u1eb7c Spam.");
   }
 
   return (
@@ -90,10 +126,10 @@ export default function RegisterPage() {
           <div className="space-y-2">
             <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-xs font-medium text-secondary-foreground">
               <Sparkles className="h-3.5 w-3.5" />
-              Tạo vibe ghi chú mới
+              T&#7841;o vibe ghi ch&#250; m&#7899;i
             </div>
-            <CardTitle>Đăng ký</CardTitle>
-            <CardDescription>Tạo tài khoản để bắt đầu lưu ghi chú.</CardDescription>
+            <CardTitle>&#272;&#259;ng k&#253;</CardTitle>
+            <CardDescription>T&#7841;o t&#224;i kho&#7843;n &#273;&#7875; b&#7855;t &#273;&#7847;u l&#432;u ghi ch&#250;.</CardDescription>
           </div>
         </CardHeader>
         <CardContent>
@@ -103,11 +139,11 @@ export default function RegisterPage() {
               <Input id="email" name="email" required type="email" placeholder="name@example.com" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Mật khẩu</Label>
+              <Label htmlFor="password">M&#7853;t kh&#7849;u</Label>
               <Input id="password" name="password" required type="password" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
+              <Label htmlFor="confirmPassword">X&#225;c nh&#7853;n m&#7853;t kh&#7849;u</Label>
               <Input id="confirmPassword" name="confirmPassword" required type="password" />
             </div>
             {error ? (
@@ -116,18 +152,32 @@ export default function RegisterPage() {
               </p>
             ) : null}
             {message ? (
-              <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-300">
-                {message}
-              </p>
+              <div className="space-y-3 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-3 text-sm text-emerald-700 dark:text-emerald-300">
+                <div className="flex items-start gap-2">
+                  <MailCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                  <p>{message}</p>
+                </div>
+                {lastEmail ? (
+                  <Button
+                    className="w-full border-emerald-500/30 bg-white/70 text-emerald-700 hover:bg-white dark:bg-emerald-950/30 dark:text-emerald-200"
+                    disabled={isResending}
+                    onClick={handleResendConfirmation}
+                    type="button"
+                    variant="outline"
+                  >
+                    {isResending ? "Đang gửi lại..." : "Gửi lại email xác nhận"}
+                  </Button>
+                ) : null}
+              </div>
             ) : null}
             <Button className="w-full" disabled={isLoading} type="submit">
-              {isLoading ? "Đang tạo tài khoản..." : "Tạo tài khoản"}
+              {isLoading ? "\u0110ang t\u1ea1o t\u00e0i kho\u1ea3n..." : "T\u1ea1o t\u00e0i kho\u1ea3n"}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Đã có tài khoản?{" "}
+            &#272;&#227; c&#243; t&#224;i kho&#7843;n?{" "}
             <Link className="font-medium text-primary underline-offset-4 hover:underline" href="/login">
-              Đăng nhập
+              &#272;&#259;ng nh&#7853;p
             </Link>
           </p>
         </CardContent>
