@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { NotebookPen, Sparkles } from "lucide-react";
+import { CheckCircle2, ImageIcon, NotebookPen, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,11 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 
 const moodChips = ["Calm", "Focus", "Neon", "Paper"];
+const previewNotes = [
+  { title: "Daily reset", label: "Calm", color: "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-200" },
+  { title: "Ý tưởng app", label: "Idea", color: "bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-200" },
+  { title: "Sprint việc cần làm", label: "Focus", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200" }
+];
 
 function getSignInErrorMessage(message: string): string {
   const normalizedMessage = message.toLowerCase();
@@ -98,6 +103,49 @@ export default function LoginPage() {
                 {chip}
               </span>
             ))}
+          </div>
+          <div className="relative mt-8 max-w-xl rounded-[2rem] border border-white/70 bg-white/65 p-4 shadow-2xl shadow-slate-300/60 backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:shadow-black/30">
+            <div className="absolute -right-5 -top-5 flex h-16 w-16 animate-auth-float items-center justify-center rounded-3xl bg-accent text-accent-foreground shadow-xl shadow-amber-200/70 dark:shadow-black/20">
+              <Zap className="h-7 w-7" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-[1fr_170px]">
+              <div className="space-y-3">
+                {previewNotes.map((note, index) => (
+                  <div
+                    className="rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-slate-950/50"
+                    key={note.title}
+                    style={{ animationDelay: `${index * 140}ms` }}
+                  >
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${note.color}`}>{note.label}</span>
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                    </div>
+                    <p className="font-semibold text-slate-900 dark:text-white">{note.title}</p>
+                    <div className="mt-3 space-y-2">
+                      <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-2 w-2/3 rounded-full bg-slate-200 dark:bg-slate-700" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="relative overflow-hidden rounded-3xl bg-slate-950 p-4 text-white shadow-inner">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.45),transparent_34%),radial-gradient(circle_at_78%_68%,rgba(244,114,182,0.35),transparent_30%)]" />
+                <div className="relative flex h-full min-h-[220px] flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur">
+                      <ImageIcon className="h-3.5 w-3.5" />
+                      Cover mood
+                    </div>
+                    <p className="text-2xl font-black leading-tight">Neon note night</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="h-12 rounded-2xl bg-white/20 backdrop-blur" />
+                    <div className="h-12 rounded-2xl bg-cyan-300/70" />
+                    <div className="h-12 rounded-2xl bg-pink-300/70" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
