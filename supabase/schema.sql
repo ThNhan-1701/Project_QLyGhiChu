@@ -103,3 +103,11 @@ CREATE POLICY "note_covers_delete" ON storage.objects FOR DELETE USING (
   bucket_id = 'note-covers'
   AND auth.uid()::text = (storage.foldername(name))[2]
 );
+
+CREATE INDEX IF NOT EXISTS notes_user_updated_at_idx ON notes (user_id, updated_at DESC);
+CREATE INDEX IF NOT EXISTS notes_user_pinned_idx ON notes (user_id, is_pinned DESC);
+CREATE INDEX IF NOT EXISTS tags_user_name_idx ON tags (user_id, name);
+CREATE INDEX IF NOT EXISTS note_tags_tag_id_idx ON note_tags (tag_id);
+CREATE INDEX IF NOT EXISTS notes_title_content_search_idx ON notes USING GIN (
+  to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, ''))
+);

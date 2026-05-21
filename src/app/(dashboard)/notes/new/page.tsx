@@ -10,7 +10,7 @@ import { getTags } from "@/lib/actions/tags";
 import { createClient } from "@/lib/supabase/client";
 import type { Tag } from "@/lib/types";
 import { uploadCoverImage } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { TagSelector } from "@/components/notes/TagSelector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -112,25 +112,12 @@ export default function NewNotePage() {
               </div>
             ) : null}
           </div>
-          <div className="space-y-3">
-            <Label>Tags</Label>
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => {
-                const selected = selectedTagIds.includes(tag.id);
-                return (
-                  <button key={tag.id} type="button" onClick={() => toggleTag(tag.id)}>
-                    <Badge
-                      className={selected ? "border-transparent text-white" : "bg-background"}
-                      variant={selected ? "default" : "outline"}
-                      style={selected ? { backgroundColor: tag.color } : undefined}
-                    >
-                      {tag.name}
-                    </Badge>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <TagSelector
+            tags={tags}
+            selectedTagIds={selectedTagIds}
+            onTagsChange={setTags}
+            onToggleTag={toggleTag}
+          />
           <label className="flex items-center gap-2 text-sm font-medium">
             <Checkbox checked={isPinned} onCheckedChange={(checked) => setIsPinned(checked === true)} />
             Ghim ghi chú

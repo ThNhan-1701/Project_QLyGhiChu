@@ -27,6 +27,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { TagSelector } from "@/components/notes/TagSelector";
 
 type NoteEditorProps = {
   note: NoteWithTags;
@@ -39,6 +40,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
   const [content, setContent] = useState(note.content);
   const [isPinned, setIsPinned] = useState(note.is_pinned);
   const [selectedTagIds, setSelectedTagIds] = useState(note.note_tags.map((item) => item.tags.id));
+  const [tags, setTags] = useState(allTags);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState(note.cover_url ?? "");
   const [isEditing, setIsEditing] = useState(false);
@@ -108,7 +110,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
   }
 
   if (!isEditing) {
-    const visibleTags = allTags.filter((tag) => selectedTagIds.includes(tag.id));
+    const visibleTags = tags.filter((tag) => selectedTagIds.includes(tag.id));
     return (
       <article className="mx-auto max-w-3xl space-y-6">
         {coverPreview ? (
@@ -200,25 +202,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
               </div>
             ) : null}
           </div>
-          <div className="space-y-3">
-            <Label>Tags</Label>
-            <div className="flex flex-wrap gap-2">
-              {allTags.map((tag) => {
-                const selected = selectedTagIds.includes(tag.id);
-                return (
-                  <button key={tag.id} type="button" onClick={() => toggleTag(tag.id)}>
-                    <Badge
-                      className={selected ? "border-transparent text-white" : "bg-background"}
-                      variant={selected ? "default" : "outline"}
-                      style={selected ? { backgroundColor: tag.color } : undefined}
-                    >
-                      {tag.name}
-                    </Badge>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <TagSelector tags={tags} selectedTagIds={selectedTagIds} onTagsChange={setTags} onToggleTag={toggleTag} />
           <label className="flex items-center gap-2 text-sm font-medium">
             <Checkbox checked={isPinned} onCheckedChange={(checked) => setIsPinned(checked === true)} />
             Ghim ghi chú

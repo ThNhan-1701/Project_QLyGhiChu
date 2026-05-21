@@ -22,7 +22,10 @@ export async function getNotes(search?: string, tagId?: string): Promise<NoteWit
       .order("is_pinned", { ascending: false })
       .order("updated_at", { ascending: false });
 
-    if (search) query = query.ilike("title", `%${search}%`);
+    if (search) {
+      const normalizedSearch = search.trim().replaceAll(",", " ");
+      query = query.or(`title.ilike.%${normalizedSearch}%,content.ilike.%${normalizedSearch}%`);
+    }
 
     const { data, error } = await query;
     if (error) throw new Error(error.message);
