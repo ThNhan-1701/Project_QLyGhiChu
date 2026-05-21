@@ -55,8 +55,9 @@
   body {
     @apply bg-background text-foreground antialiased;
     background-image:
-      radial-gradient(circle at top left, hsl(var(--primary) / 0.12), transparent 32rem),
-      radial-gradient(circle at bottom right, hsl(var(--secondary) / 0.10), transparent 28rem);
+      radial-gradient(circle at 12% 8%, hsl(var(--primary) / 0.16), transparent 30rem),
+      radial-gradient(circle at 82% 12%, hsl(var(--accent) / 0.14), transparent 24rem),
+      radial-gradient(circle at bottom right, hsl(var(--secondary) / 0.12), transparent 28rem);
     background-attachment: fixed;
   }
 }
