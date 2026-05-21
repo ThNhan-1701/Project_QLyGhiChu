@@ -66,11 +66,31 @@ const config = {
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" }
+        },
+        "auth-float": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0) rotate(0deg)" },
+          "50%": { transform: "translate3d(0, -14px, 0) rotate(1deg)" }
+        },
+        "auth-glow": {
+          "0%, 100%": { opacity: "0.45", transform: "scale(1)" },
+          "50%": { opacity: "0.82", transform: "scale(1.08)" }
+        },
+        "auth-rise": {
+          from: { opacity: "0", transform: "translateY(18px) scale(0.98)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" }
+        },
+        "gradient-shift": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" }
         }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out"
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "auth-float": "auth-float 7s ease-in-out infinite",
+        "auth-glow": "auth-glow 3.6s ease-in-out infinite",
+        "auth-rise": "auth-rise 0.55s ease-out both",
+        "gradient-shift": "gradient-shift 12s ease infinite"
       }
     }
   },

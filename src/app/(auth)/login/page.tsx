@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 
+const moodChips = ["Calm", "Focus", "Neon", "Paper"];
+
 function getSignInErrorMessage(message: string): string {
   const normalizedMessage = message.toLowerCase();
 
@@ -62,49 +64,101 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_15%,rgba(45,212,191,0.22),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(244,114,182,0.24),transparent_26%),linear-gradient(135deg,#fff7ed_0%,#f8fafc_42%,#ecfeff_100%)] dark:bg-[radial-gradient(circle_at_15%_15%,rgba(20,184,166,0.18),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(244,114,182,0.14),transparent_26%),linear-gradient(135deg,#0f172a_0%,#111827_55%,#042f2e_100%)]" />
-      <Card className="w-full max-w-md border-white/70 bg-white/90 shadow-2xl shadow-slate-200/80 backdrop-blur dark:border-white/10 dark:bg-card/90 dark:shadow-black/30">
-        <CardHeader className="space-y-4 text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-            <NotebookPen className="h-8 w-8" />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+      <div className="absolute inset-0 -z-20 bg-[length:180%_180%] bg-[radial-gradient(circle_at_12%_18%,rgba(34,211,238,0.24),transparent_30%),radial-gradient(circle_at_82%_14%,rgba(244,114,182,0.26),transparent_28%),radial-gradient(circle_at_58%_92%,rgba(250,204,21,0.18),transparent_26%),linear-gradient(135deg,#fff7ed_0%,#f8fafc_46%,#ecfeff_100%)] animate-gradient-shift dark:bg-[radial-gradient(circle_at_12%_18%,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_82%_14%,rgba(244,114,182,0.14),transparent_28%),radial-gradient(circle_at_58%_92%,rgba(250,204,21,0.12),transparent_26%),linear-gradient(135deg,#020617_0%,#111827_52%,#042f2e_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-[size:42px_42px] opacity-70 dark:opacity-20" />
+      <div className="pointer-events-none absolute left-[8%] top-[14%] hidden animate-auth-float rounded-full border border-white/60 bg-white/55 px-4 py-2 text-sm font-semibold text-sky-700 shadow-xl shadow-sky-200/60 backdrop-blur md:block dark:border-white/10 dark:bg-white/10 dark:text-sky-100">
+        Quick capture
+      </div>
+      <div className="pointer-events-none absolute bottom-[16%] right-[10%] hidden animate-auth-float rounded-full border border-white/60 bg-white/55 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-xl shadow-emerald-200/60 backdrop-blur [animation-delay:1.4s] md:block dark:border-white/10 dark:bg-white/10 dark:text-emerald-100">
+        Daily prompt
+      </div>
+
+      <section className="grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[1fr_420px]">
+        <div className="hidden animate-auth-rise space-y-6 lg:block">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/60 px-4 py-2 text-sm font-semibold text-primary shadow-lg shadow-sky-100/80 backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-sky-100">
+            <Sparkles className="h-4 w-4" />
+            Mood board ghi ch&#250;
           </div>
-          <div className="space-y-2">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-              <Sparkles className="h-3.5 w-3.5" />
-              Mood board ghi ch&#250;
-            </div>
-            <CardTitle>&#272;&#259;ng nh&#7853;p</CardTitle>
-            <CardDescription>Truy c&#7853;p kh&#244;ng gian ghi ch&#250; c&#225; nh&#226;n c&#7911;a b&#7841;n.</CardDescription>
+          <div className="space-y-4">
+            <h1 className="max-w-xl text-5xl font-black leading-tight tracking-tight text-slate-950 dark:text-white">
+              Ghi ch&#250; nhanh, v&#224;o mood ngay.
+            </h1>
+            <p className="max-w-lg text-base leading-7 text-slate-600 dark:text-slate-300">
+              L&#432;u &#253; t&#432;&#7903;ng, g&#7855;n vibe v&#224; quay l&#7841;i workflow c&#7911;a b&#7841;n trong m&#7897;t kh&#244;ng gian s&#225;ng, g&#7885;n, c&#243; ch&#250;t vui.
+            </p>
           </div>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" required type="email" placeholder="name@example.com" />
+          <div className="flex flex-wrap gap-3">
+            {moodChips.map((chip, index) => (
+              <span
+                className="rounded-full border border-white/60 bg-white/65 px-4 py-2 text-sm font-semibold text-slate-700 shadow-lg shadow-slate-200/50 backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
+                key={chip}
+                style={{ animationDelay: `${index * 120}ms` }}
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <Card className="animate-auth-rise overflow-hidden border-white/70 bg-white/90 shadow-2xl shadow-slate-300/80 backdrop-blur-xl dark:border-white/10 dark:bg-card/90 dark:shadow-black/30">
+          <CardHeader className="space-y-4 text-center">
+            <div className="relative mx-auto flex h-20 w-20 items-center justify-center">
+              <div className="absolute inset-0 animate-auth-glow rounded-[1.75rem] bg-primary/35 blur-xl" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-105">
+                <NotebookPen className="h-8 w-8" />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">M&#7853;t kh&#7849;u</Label>
-              <Input id="password" name="password" required type="password" />
+              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                <Sparkles className="h-3.5 w-3.5" />
+                Welcome back
+              </div>
+              <CardTitle className="text-3xl">&#272;&#259;ng nh&#7853;p</CardTitle>
+              <CardDescription>Truy c&#7853;p kh&#244;ng gian ghi ch&#250; c&#225; nh&#226;n c&#7911;a b&#7841;n.</CardDescription>
             </div>
-            {error ? (
-              <p className="rounded-lg border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {error}
-              </p>
-            ) : null}
-            <Button className="w-full" disabled={isLoading} type="submit">
-              {isLoading ? "\u0110ang \u0111\u0103ng nh\u1eadp..." : "\u0110\u0103ng nh\u1eadp"}
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            Ch&#432;a c&#243; t&#224;i kho&#7843;n?{" "}
-            <Link className="font-medium text-primary underline-offset-4 hover:underline" href="/register">
-              &#272;&#259;ng k&#253;
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  className="h-11 bg-white/80 transition shadow-sm focus-visible:scale-[1.01] dark:bg-white/5"
+                  id="email"
+                  name="email"
+                  required
+                  type="email"
+                  placeholder="name@example.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">M&#7853;t kh&#7849;u</Label>
+                <Input
+                  className="h-11 bg-white/80 transition shadow-sm focus-visible:scale-[1.01] dark:bg-white/5"
+                  id="password"
+                  name="password"
+                  required
+                  type="password"
+                />
+              </div>
+              {error ? (
+                <p className="rounded-lg border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                  {error}
+                </p>
+              ) : null}
+              <Button className="h-11 w-full shadow-lg shadow-primary/20 transition hover:-translate-y-0.5" disabled={isLoading} type="submit">
+                {isLoading ? "\u0110ang \u0111\u0103ng nh\u1eadp..." : "\u0110\u0103ng nh\u1eadp"}
+              </Button>
+            </form>
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              Ch&#432;a c&#243; t&#224;i kho&#7843;n?{" "}
+              <Link className="font-medium text-primary underline-offset-4 hover:underline" href="/register">
+                &#272;&#259;ng k&#253;
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+      </section>
     </main>
   );
 }
