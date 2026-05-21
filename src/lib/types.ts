@@ -12,6 +12,7 @@ export interface Note {
   content: string;
   is_pinned: boolean;
   mood: NoteMood;
+  note_style: NoteStyle;
   cover_url: string | null;
   user_id: string;
   created_at: string;
@@ -27,6 +28,7 @@ export type CreateNoteInput = {
   content: string;
   is_pinned: boolean;
   mood: NoteMood;
+  note_style: NoteStyle;
   tag_ids: string[];
 };
 
@@ -45,3 +47,5 @@ export type NoteMood =
   | "win"
   | "messy"
   | "important";
+
+export type NoteStyle = "classic" | "neon" | "calm" | "paper" | "focus";

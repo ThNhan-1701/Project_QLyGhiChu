@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS notes (
   content TEXT DEFAULT '',
   is_pinned BOOLEAN DEFAULT FALSE,
   mood TEXT NOT NULL DEFAULT 'focus',
+  note_style TEXT NOT NULL DEFAULT 'classic',
   cover_url TEXT,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS note_tags (
 );
 
 ALTER TABLE notes ADD COLUMN IF NOT EXISTS mood TEXT NOT NULL DEFAULT 'focus';
+ALTER TABLE notes ADD COLUMN IF NOT EXISTS note_style TEXT NOT NULL DEFAULT 'classic';
 
 DO $$
 BEGIN
@@ -36,6 +38,19 @@ BEGIN
   ) THEN
     ALTER TABLE notes ADD CONSTRAINT notes_mood_check
       CHECK (mood IN ('focus', 'happy', 'idea', 'urgent', 'calm', 'win', 'messy', 'important'));
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'notes_note_style_check'
+      AND conrelid = 'notes'::regclass
+  ) THEN
+    ALTER TABLE notes ADD CONSTRAINT notes_note_style_check
+      CHECK (note_style IN ('classic', 'neon', 'calm', 'paper', 'focus'));
   END IF;
 END $$;
 
@@ -123,6 +138,7 @@ CREATE POLICY "note_covers_delete" ON storage.objects FOR DELETE USING (
 CREATE INDEX IF NOT EXISTS notes_user_updated_at_idx ON notes (user_id, updated_at DESC);
 CREATE INDEX IF NOT EXISTS notes_user_pinned_idx ON notes (user_id, is_pinned DESC);
 CREATE INDEX IF NOT EXISTS notes_user_mood_idx ON notes (user_id, mood);
+CREATE INDEX IF NOT EXISTS notes_user_note_style_idx ON notes (user_id, note_style);
 CREATE INDEX IF NOT EXISTS tags_user_name_idx ON tags (user_id, name);
 CREATE INDEX IF NOT EXISTS note_tags_tag_id_idx ON note_tags (tag_id);
 CREATE INDEX IF NOT EXISTS notes_title_content_search_idx ON notes USING GIN (

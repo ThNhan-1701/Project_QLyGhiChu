@@ -9,6 +9,8 @@ import { deleteNote, togglePin, updateNote } from "@/lib/actions/notes";
 import { createClient } from "@/lib/supabase/client";
 import type { NoteWithTags, Tag } from "@/lib/types";
 import { uploadCoverImage } from "@/lib/utils";
+import { getMoodOption } from "@/lib/moods";
+import { getNoteStyleOption } from "@/lib/note-styles";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,7 +31,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TagSelector } from "@/components/notes/TagSelector";
 import { MoodSelector } from "@/components/notes/MoodSelector";
-import { getMoodOption } from "@/lib/moods";
+import { StyleSelector } from "@/components/notes/StyleSelector";
 
 type NoteEditorProps = {
   note: NoteWithTags;
@@ -41,6 +43,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [mood, setMood] = useState(note.mood);
+  const [noteStyle, setNoteStyle] = useState(note.note_style);
   const [isPinned, setIsPinned] = useState(note.is_pinned);
   const [selectedTagIds, setSelectedTagIds] = useState(note.note_tags.map((item) => item.tags.id));
   const [tags, setTags] = useState(allTags);
@@ -78,7 +81,10 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
         coverUrl = await uploadCoverImage(coverFile, data.user.id);
       }
 
-      await updateNote({ id: note.id, title, content, mood, is_pinned: isPinned, tag_ids: selectedTagIds }, coverUrl);
+      await updateNote(
+        { id: note.id, title, content, mood, note_style: noteStyle, is_pinned: isPinned, tag_ids: selectedTagIds },
+        coverUrl
+      );
       toast.success("Đã lưu ghi chú");
       setIsEditing(false);
       router.refresh();
@@ -116,6 +122,8 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
     const visibleTags = tags.filter((tag) => selectedTagIds.includes(tag.id));
     const moodOption = getMoodOption(mood);
     const MoodIcon = moodOption.icon;
+    const styleOption = getNoteStyleOption(noteStyle);
+
     return (
       <article className="mx-auto max-w-3xl space-y-6">
         {coverPreview ? (
@@ -123,54 +131,59 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
             <Image alt={title} className="object-cover" fill priority sizes="(min-width: 768px) 768px, 100vw" src={coverPreview} />
           </div>
         ) : null}
-        <div className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-            <div className="flex gap-2">
-              <Button variant="outline" type="button" onClick={() => setIsEditing(true)}>
-                Chỉnh sửa
-              </Button>
-              <Button variant="outline" type="button" onClick={handleTogglePin}>
-                <Pin className="mr-2 h-4 w-4" />
-                {isPinned ? "Bỏ ghim" : "Ghim"}
-              </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" type="button">
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Xóa
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Xóa ghi chú?</AlertDialogTitle>
-                    <AlertDialogDescription>Thao tác này sẽ xóa vĩnh viễn ghi chú hiện tại.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Hủy</AlertDialogCancel>
-                    <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleDelete}>
+        <div className={styleOption.detailClassName}>
+          <div className="space-y-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" type="button" onClick={() => setIsEditing(true)}>
+                  Chỉnh sửa
+                </Button>
+                <Button variant="outline" type="button" onClick={handleTogglePin}>
+                  <Pin className="mr-2 h-4 w-4" />
+                  {isPinned ? "Bỏ ghim" : "Ghim"}
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" type="button">
+                      <Trash2 className="mr-2 h-4 w-4" />
                       Xóa
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Xóa ghi chú?</AlertDialogTitle>
+                      <AlertDialogDescription>Thao tác này sẽ xóa vĩnh viễn ghi chú hiện tại.</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Hủy</AlertDialogCancel>
+                      <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={handleDelete}>
+                        Xóa
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
+            <div className="flex flex-wrap gap-2">
+              <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold ${moodOption.className}`}>
+                <MoodIcon className="h-3.5 w-3.5" />
+                {moodOption.label}
+              </span>
+              <span className="inline-flex items-center rounded-md border bg-background/70 px-2.5 py-0.5 text-xs font-semibold">
+                {styleOption.label}
+              </span>
+              {visibleTags.map((tag) => (
+                <Badge key={tag.id} className="border-transparent text-white" style={{ backgroundColor: tag.color }}>
+                  {tag.name}
+                </Badge>
+              ))}
+            </div>
+            <p className="whitespace-pre-wrap text-base leading-7">{content || "Không có nội dung"}</p>
+            <p className="text-sm text-muted-foreground">
+              Cập nhật lần cuối: {new Date(note.updated_at).toLocaleString("vi-VN")}
+            </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold ${moodOption.className}`}>
-              <MoodIcon className="h-3.5 w-3.5" />
-              {moodOption.label}
-            </span>
-            {visibleTags.map((tag) => (
-              <Badge key={tag.id} className="border-transparent text-white" style={{ backgroundColor: tag.color }}>
-                {tag.name}
-              </Badge>
-            ))}
-          </div>
-          <p className="whitespace-pre-wrap text-base leading-7">{content || "Không có nội dung"}</p>
-          <p className="text-sm text-muted-foreground">
-            Cập nhật lần cuối: {new Date(note.updated_at).toLocaleString("vi-VN")}
-          </p>
         </div>
       </article>
     );
@@ -199,7 +212,14 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
                 </label>
               </Button>
               {coverPreview ? (
-                <Button type="button" variant="ghost" onClick={() => { setCoverFile(null); setCoverPreview(""); }}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setCoverFile(null);
+                    setCoverPreview("");
+                  }}
+                >
                   <X className="mr-2 h-4 w-4" />
                   Xóa
                 </Button>
@@ -212,6 +232,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
             ) : null}
           </div>
           <MoodSelector value={mood} onChange={setMood} />
+          <StyleSelector value={noteStyle} onChange={setNoteStyle} />
           <TagSelector tags={tags} selectedTagIds={selectedTagIds} onTagsChange={setTags} onToggleTag={toggleTag} />
           <label className="flex items-center gap-2 text-sm font-medium">
             <Checkbox checked={isPinned} onCheckedChange={(checked) => setIsPinned(checked === true)} />

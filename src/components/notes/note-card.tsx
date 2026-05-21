@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { NoteWithTags } from "@/lib/types";
 import { getMoodOption } from "@/lib/moods";
+import { getNoteStyleOption } from "@/lib/note-styles";
+import { cn } from "@/lib/utils";
 
 type NoteCardProps = {
   note: NoteWithTags;
@@ -24,10 +26,16 @@ export function NoteCard({ note }: NoteCardProps) {
   const summary = note.content.length > 120 ? `${note.content.slice(0, 120)}...` : note.content;
   const mood = getMoodOption(note.mood);
   const MoodIcon = mood.icon;
+  const noteStyle = getNoteStyleOption(note.note_style);
 
   return (
     <Link className="block" href={`/notes/${note.id}`}>
-      <Card className="h-full overflow-hidden border-white/70 bg-white/85 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/80 dark:border-white/10 dark:bg-card/90 dark:hover:shadow-black/25">
+      <Card
+        className={cn(
+          "h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/80 dark:hover:shadow-black/25",
+          noteStyle.cardClassName
+        )}
+      >
         {note.cover_url ? (
           <div className="relative aspect-video bg-muted">
             <Image alt={note.title} className="object-cover" fill sizes="(min-width: 1024px) 33vw, 100vw" src={note.cover_url} />
@@ -38,6 +46,9 @@ export function NoteCard({ note }: NoteCardProps) {
             <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold ${mood.className}`}>
               <MoodIcon className="h-3.5 w-3.5" />
               {mood.label}
+            </span>
+            <span className="rounded-md border bg-background/70 px-2 py-0.5 text-[11px] font-semibold">
+              {noteStyle.label}
             </span>
           </div>
           <div className="flex items-start gap-2">

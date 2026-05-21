@@ -8,10 +8,11 @@ import { toast } from "sonner";
 import { createNote } from "@/lib/actions/notes";
 import { getTags } from "@/lib/actions/tags";
 import { createClient } from "@/lib/supabase/client";
-import type { NoteMood, Tag } from "@/lib/types";
+import type { NoteMood, NoteStyle, Tag } from "@/lib/types";
 import { uploadCoverImage } from "@/lib/utils";
 import { TagSelector } from "@/components/notes/TagSelector";
 import { MoodSelector } from "@/components/notes/MoodSelector";
+import { StyleSelector } from "@/components/notes/StyleSelector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -52,6 +53,7 @@ type NoteDraft = {
   title: string;
   content: string;
   mood: NoteMood;
+  noteStyle: NoteStyle;
   isPinned: boolean;
   selectedTagIds: string[];
 };
@@ -62,6 +64,7 @@ export default function NewNotePage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState<NoteMood>("focus");
+  const [noteStyle, setNoteStyle] = useState<NoteStyle>("classic");
   const [isPinned, setIsPinned] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -70,8 +73,14 @@ export default function NewNotePage() {
   const [hasLoadedDraft, setHasLoadedDraft] = useState(false);
 
   const hasDraftContent = useMemo(
-    () => title.trim().length > 0 || content.trim().length > 0 || selectedTagIds.length > 0 || isPinned || mood !== "focus",
-    [content, isPinned, mood, selectedTagIds.length, title]
+    () =>
+      title.trim().length > 0 ||
+      content.trim().length > 0 ||
+      selectedTagIds.length > 0 ||
+      isPinned ||
+      mood !== "focus" ||
+      noteStyle !== "classic",
+    [content, isPinned, mood, noteStyle, selectedTagIds.length, title]
   );
 
   useEffect(() => {
@@ -90,6 +99,7 @@ export default function NewNotePage() {
       setTitle(draft.title ?? "");
       setContent(draft.content ?? "");
       setMood(draft.mood ?? "focus");
+      setNoteStyle(draft.noteStyle ?? "classic");
       setIsPinned(draft.isPinned ?? false);
       setSelectedTagIds(draft.selectedTagIds ?? []);
       toast.info("Đã khôi phục bản nháp đang viết");
@@ -113,6 +123,7 @@ export default function NewNotePage() {
         title,
         content,
         mood,
+        noteStyle,
         isPinned,
         selectedTagIds
       };
@@ -120,7 +131,7 @@ export default function NewNotePage() {
     }, 500);
 
     return () => window.clearTimeout(timer);
-  }, [content, hasDraftContent, hasLoadedDraft, isPinned, mood, selectedTagIds, title]);
+  }, [content, hasDraftContent, hasLoadedDraft, isPinned, mood, noteStyle, selectedTagIds, title]);
 
   function handleCoverChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
@@ -149,6 +160,7 @@ export default function NewNotePage() {
     setTitle("");
     setContent("");
     setMood("focus");
+    setNoteStyle("classic");
     setIsPinned(false);
     setSelectedTagIds([]);
     setCoverFile(null);
@@ -174,7 +186,7 @@ export default function NewNotePage() {
         coverUrl = await uploadCoverImage(coverFile, data.user.id);
       }
 
-      await createNote({ title, content, mood, is_pinned: isPinned, tag_ids: selectedTagIds }, coverUrl);
+      await createNote({ title, content, mood, note_style: noteStyle, is_pinned: isPinned, tag_ids: selectedTagIds }, coverUrl);
       window.localStorage.removeItem(draftKey);
       toast.success("Tạo ghi chú thành công");
       router.push("/dashboard");
@@ -252,6 +264,7 @@ export default function NewNotePage() {
             </p>
           </div>
           <MoodSelector value={mood} onChange={setMood} />
+          <StyleSelector value={noteStyle} onChange={setNoteStyle} />
           <div className="space-y-3">
             <Label>Ảnh bìa</Label>
             <input id="cover" className="hidden" type="file" accept="image/*" onChange={handleCoverChange} />
