@@ -15,11 +15,12 @@ type DashboardPageProps = {
   searchParams: {
     search?: string;
     tag?: string;
+    mood?: string;
   };
 };
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
-  const result = await Promise.all([getNotes(searchParams.search, searchParams.tag), getTags()])
+  const result = await Promise.all([getNotes(searchParams.search, searchParams.tag, searchParams.mood), getTags()])
     .then(([notes, tags]) => ({ notes, tags, error: "" }))
     .catch((error: Error) => ({ notes: [], tags: [], error: error.message }));
 
@@ -28,7 +29,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   }
 
   const { notes, tags } = result;
-  const hasFilter = Boolean(searchParams.search || searchParams.tag);
+  const hasFilter = Boolean(searchParams.search || searchParams.tag || searchParams.mood);
 
   return (
     <div className="space-y-6">
@@ -60,7 +61,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </div>
         </div>
       </div>
-      <NoteFilter tags={tags} currentSearch={searchParams.search} currentTag={searchParams.tag} />
+      <NoteFilter
+        tags={tags}
+        currentSearch={searchParams.search}
+        currentTag={searchParams.tag}
+        currentMood={searchParams.mood}
+      />
       {notes.length === 0 && !hasFilter ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center gap-4 p-10 text-center">

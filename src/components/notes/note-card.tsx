@@ -4,6 +4,7 @@ import { Pin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { NoteWithTags } from "@/lib/types";
+import { getMoodOption } from "@/lib/moods";
 
 type NoteCardProps = {
   note: NoteWithTags;
@@ -21,6 +22,8 @@ function formatRelativeTime(value: string): string {
 export function NoteCard({ note }: NoteCardProps) {
   const tags = note.note_tags.map((item) => item.tags);
   const summary = note.content.length > 120 ? `${note.content.slice(0, 120)}...` : note.content;
+  const mood = getMoodOption(note.mood);
+  const MoodIcon = mood.icon;
 
   return (
     <Link className="block" href={`/notes/${note.id}`}>
@@ -31,6 +34,12 @@ export function NoteCard({ note }: NoteCardProps) {
           </div>
         ) : null}
         <CardContent className="space-y-3 p-4">
+          <div className="flex items-center justify-between gap-2">
+            <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold ${mood.className}`}>
+              <MoodIcon className="h-3.5 w-3.5" />
+              {mood.label}
+            </span>
+          </div>
           <div className="flex items-start gap-2">
             {note.is_pinned ? <Pin className="mt-0.5 h-4 w-4 shrink-0 fill-amber-400 text-amber-500" /> : null}
             <h2 className="line-clamp-2 font-semibold">{note.title}</h2>

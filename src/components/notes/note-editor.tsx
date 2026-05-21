@@ -28,6 +28,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TagSelector } from "@/components/notes/TagSelector";
+import { MoodSelector } from "@/components/notes/MoodSelector";
+import { getMoodOption } from "@/lib/moods";
 
 type NoteEditorProps = {
   note: NoteWithTags;
@@ -38,6 +40,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
   const router = useRouter();
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
+  const [mood, setMood] = useState(note.mood);
   const [isPinned, setIsPinned] = useState(note.is_pinned);
   const [selectedTagIds, setSelectedTagIds] = useState(note.note_tags.map((item) => item.tags.id));
   const [tags, setTags] = useState(allTags);
@@ -75,7 +78,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
         coverUrl = await uploadCoverImage(coverFile, data.user.id);
       }
 
-      await updateNote({ id: note.id, title, content, is_pinned: isPinned, tag_ids: selectedTagIds }, coverUrl);
+      await updateNote({ id: note.id, title, content, mood, is_pinned: isPinned, tag_ids: selectedTagIds }, coverUrl);
       toast.success("Đã lưu ghi chú");
       setIsEditing(false);
       router.refresh();
@@ -111,6 +114,8 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
 
   if (!isEditing) {
     const visibleTags = tags.filter((tag) => selectedTagIds.includes(tag.id));
+    const moodOption = getMoodOption(mood);
+    const MoodIcon = moodOption.icon;
     return (
       <article className="mx-auto max-w-3xl space-y-6">
         {coverPreview ? (
@@ -152,6 +157,10 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
+            <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold ${moodOption.className}`}>
+              <MoodIcon className="h-3.5 w-3.5" />
+              {moodOption.label}
+            </span>
             {visibleTags.map((tag) => (
               <Badge key={tag.id} className="border-transparent text-white" style={{ backgroundColor: tag.color }}>
                 {tag.name}
@@ -202,6 +211,7 @@ export function NoteEditor({ note, allTags }: NoteEditorProps) {
               </div>
             ) : null}
           </div>
+          <MoodSelector value={mood} onChange={setMood} />
           <TagSelector tags={tags} selectedTagIds={selectedTagIds} onTagsChange={setTags} onToggleTag={toggleTag} />
           <label className="flex items-center gap-2 text-sm font-medium">
             <Checkbox checked={isPinned} onCheckedChange={(checked) => setIsPinned(checked === true)} />

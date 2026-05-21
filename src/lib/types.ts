@@ -11,6 +11,7 @@ export interface Note {
   title: string;
   content: string;
   is_pinned: boolean;
+  mood: NoteMood;
   cover_url: string | null;
   user_id: string;
   created_at: string;
@@ -25,6 +26,7 @@ export type CreateNoteInput = {
   title: string;
   content: string;
   is_pinned: boolean;
+  mood: NoteMood;
   tag_ids: string[];
 };
 
@@ -33,3 +35,13 @@ export type UpdateNoteInput = Partial<CreateNoteInput> & { id: string };
 export type TagWithCount = Tag & {
   note_count: number;
 };
+
+export type NoteMood =
+  | "focus"
+  | "happy"
+  | "idea"
+  | "urgent"
+  | "calm"
+  | "win"
+  | "messy"
+  | "important";

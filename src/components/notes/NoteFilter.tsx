@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { moodOptions } from "@/lib/moods";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,9 +13,10 @@ type NoteFilterProps = {
   tags: Tag[];
   currentSearch?: string;
   currentTag?: string;
+  currentMood?: string;
 };
 
-export function NoteFilter({ tags, currentSearch, currentTag }: NoteFilterProps) {
+export function NoteFilter({ tags, currentSearch, currentTag, currentMood }: NoteFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(currentSearch ?? "");
@@ -30,10 +32,10 @@ export function NoteFilter({ tags, currentSearch, currentTag }: NoteFilterProps)
     return () => window.clearTimeout(timer);
   }, [router, search, searchParams]);
 
-  function updateTag(value: string) {
+  function updateParam(name: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === "all") params.delete("tag");
-    else params.set("tag", value);
+    if (value === "all") params.delete(name);
+    else params.set(name, value);
     router.push(`/dashboard?${params.toString()}`);
   }
 
@@ -42,10 +44,10 @@ export function NoteFilter({ tags, currentSearch, currentTag }: NoteFilterProps)
     router.push("/dashboard");
   }
 
-  const hasFilter = Boolean(currentSearch || currentTag);
+  const hasFilter = Boolean(currentSearch || currentTag || currentMood);
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border bg-card/80 p-3 shadow-sm backdrop-blur sm:flex-row">
+    <div className="flex flex-col gap-3 rounded-2xl border bg-card/80 p-3 shadow-sm backdrop-blur lg:flex-row">
       <div className="relative flex-1">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -55,8 +57,8 @@ export function NoteFilter({ tags, currentSearch, currentTag }: NoteFilterProps)
           onChange={(event) => setSearch(event.target.value)}
         />
       </div>
-      <Select value={currentTag ?? "all"} onValueChange={updateTag}>
-        <SelectTrigger className="sm:w-56">
+      <Select value={currentTag ?? "all"} onValueChange={(value) => updateParam("tag", value)}>
+        <SelectTrigger className="lg:w-56">
           <SelectValue placeholder="Lọc theo tag" />
         </SelectTrigger>
         <SelectContent>
@@ -66,6 +68,25 @@ export function NoteFilter({ tags, currentSearch, currentTag }: NoteFilterProps)
               {tag.name}
             </SelectItem>
           ))}
+        </SelectContent>
+      </Select>
+      <Select value={currentMood ?? "all"} onValueChange={(value) => updateParam("mood", value)}>
+        <SelectTrigger className="lg:w-56">
+          <SelectValue placeholder="Lọc theo mood" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Tất cả mood</SelectItem>
+          {moodOptions.map((mood) => {
+            const Icon = mood.icon;
+            return (
+              <SelectItem key={mood.id} value={mood.id}>
+                <span className="inline-flex items-center gap-2">
+                  <Icon className="h-4 w-4" />
+                  {mood.label}
+                </span>
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
       {hasFilter ? (

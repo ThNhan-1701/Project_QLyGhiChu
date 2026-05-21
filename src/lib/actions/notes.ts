@@ -11,7 +11,7 @@ async function getUserId(): Promise<string> {
   return data.user.id;
 }
 
-export async function getNotes(search?: string, tagId?: string): Promise<NoteWithTags[]> {
+export async function getNotes(search?: string, tagId?: string, mood?: string): Promise<NoteWithTags[]> {
   try {
     const supabase = await createClient();
     const userId = await getUserId();
@@ -25,6 +25,10 @@ export async function getNotes(search?: string, tagId?: string): Promise<NoteWit
     if (search) {
       const normalizedSearch = search.trim().replaceAll(",", " ");
       query = query.or(`title.ilike.%${normalizedSearch}%,content.ilike.%${normalizedSearch}%`);
+    }
+
+    if (mood) {
+      query = query.eq("mood", mood);
     }
 
     const { data, error } = await query;
