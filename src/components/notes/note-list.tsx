@@ -22,7 +22,7 @@ export function NoteList({ notes }: NoteListProps) {
       {pinned.length > 0 ? (
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">Đã ghim</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {pinned.map((note) => (
               <NoteCard key={note.id} note={note} />
             ))}
@@ -32,7 +32,7 @@ export function NoteList({ notes }: NoteListProps) {
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">Tất cả ghi chú</h2>
         {others.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {others.map((note) => (
               <NoteCard key={note.id} note={note} />
             ))}
