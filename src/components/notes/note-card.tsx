@@ -15,10 +15,10 @@ type NoteCardProps = {
 function formatRelativeTime(value: string): string {
   const diff = Date.now() - new Date(value).getTime();
   const minutes = Math.max(1, Math.floor(diff / 60000));
-  if (minutes < 60) return `${minutes} phút trước`;
+  if (minutes < 60) return `${minutes} ph\u00fat tr\u01b0\u1edbc`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} giờ trước`;
-  return `${Math.floor(hours / 24)} ngày trước`;
+  if (hours < 24) return `${hours} gi\u1edd tr\u01b0\u1edbc`;
+  return `${Math.floor(hours / 24)} ng\u00e0y tr\u01b0\u1edbc`;
 }
 
 export function NoteCard({ note }: NoteCardProps) {
@@ -33,38 +33,52 @@ export function NoteCard({ note }: NoteCardProps) {
     <Link className="group block h-full" href={`/notes/${note.id}`}>
       <Card
         className={cn(
-          "relative h-full overflow-hidden rounded-2xl transition-all duration-200 hover:-translate-y-1 hover:shadow-xl",
+          "relative h-full overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:rotate-[0.25deg] hover:shadow-2xl",
           noteStyle.cardClassName
         )}
       >
-        <div className={cn("absolute left-0 top-0 h-full w-1.5", noteStyle.accentClassName)} />
+        <div
+          className={cn(
+            "pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-60 blur-3xl transition duration-500 group-hover:scale-125 group-hover:opacity-90",
+            noteStyle.glowClassName
+          )}
+        />
+        <div className="pointer-events-none absolute inset-y-0 -left-1/3 z-10 hidden w-1/3 bg-gradient-to-r from-transparent via-white/45 to-transparent opacity-0 group-hover:block group-hover:animate-card-sheen group-hover:opacity-100 dark:via-white/20" />
+        <div className={cn("absolute left-0 top-0 h-full w-2 shadow-lg", noteStyle.accentClassName)} />
         <div className="relative">
           {note.cover_url ? (
             <div className="relative aspect-[16/7] overflow-hidden bg-muted">
               <Image
                 alt={note.title}
-                className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                className="object-cover transition duration-500 group-hover:scale-[1.06]"
                 fill
                 sizes="(min-width: 1024px) 33vw, 100vw"
                 src={note.cover_url}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
             </div>
           ) : (
             <div className={cn("relative aspect-[16/7] overflow-hidden", noteStyle.patternClassName)}>
-              <div className="absolute right-4 top-4 rounded-2xl bg-background/60 p-3 shadow-sm backdrop-blur">
+              <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.22),transparent)] opacity-70" />
+              <div className="absolute left-4 top-4 h-10 w-24 rounded-full bg-white/30 blur-xl dark:bg-white/10" />
+              <div className="absolute right-4 top-4 rounded-2xl bg-background/70 p-3 shadow-lg backdrop-blur transition duration-300 group-hover:rotate-6 group-hover:scale-110">
                 <StyleIcon className="h-5 w-5" />
+              </div>
+              <div className="absolute bottom-4 left-5 flex gap-1.5">
+                <span className="h-2 w-8 rounded-full bg-white/70 shadow-sm dark:bg-white/30" />
+                <span className="h-2 w-2 rounded-full bg-white/60 shadow-sm dark:bg-white/25" />
+                <span className="h-2 w-2 rounded-full bg-white/50 shadow-sm dark:bg-white/20" />
               </div>
             </div>
           )}
         </div>
-        <CardContent className="flex min-h-[220px] flex-col gap-4 p-5 pl-6">
+        <CardContent className="relative z-0 flex min-h-[220px] flex-col gap-4 p-5 pl-6">
           <div className="flex items-center justify-between gap-2">
-            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${mood.className}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold shadow-sm transition group-hover:scale-105 ${mood.className}`}>
               <MoodIcon className="h-3.5 w-3.5" />
               {mood.label}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border bg-background/70 px-2.5 py-1 text-[11px] font-semibold backdrop-blur">
+            <span className="inline-flex items-center gap-1 rounded-full border bg-background/75 px-2.5 py-1 text-[11px] font-semibold shadow-sm backdrop-blur transition group-hover:bg-background/90">
               <StyleIcon className="h-3 w-3" />
               {noteStyle.label}
             </span>
@@ -75,8 +89,8 @@ export function NoteCard({ note }: NoteCardProps) {
               {note.is_pinned ? <Pin className="mt-1 h-4 w-4 shrink-0 fill-amber-400 text-amber-500" /> : null}
               <h2 className="line-clamp-2 text-lg font-semibold leading-snug tracking-tight">{note.title}</h2>
             </div>
-            <p className="line-clamp-3 min-h-[3.75rem] text-sm leading-6 text-muted-foreground">
-              {summary || "Không có nội dung"}
+            <p className="line-clamp-3 min-h-[3.75rem] text-sm leading-6 text-muted-foreground transition group-hover:text-foreground/75">
+              {summary || "Kh\u00f4ng c\u00f3 n\u1ed9i dung"}
             </p>
           </div>
 
@@ -89,7 +103,7 @@ export function NoteCard({ note }: NoteCardProps) {
               ))}
               {tags.length > 3 ? <Badge variant="secondary">+{tags.length - 3}</Badge> : null}
             </div>
-            <div className="flex items-center gap-1.5 border-t pt-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 border-t border-foreground/10 pt-3 text-xs text-muted-foreground">
               <CalendarClock className="h-3.5 w-3.5" />
               <time dateTime={note.updated_at}>{formatRelativeTime(note.updated_at)}</time>
             </div>

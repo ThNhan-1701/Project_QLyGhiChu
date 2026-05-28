@@ -82,6 +82,10 @@ const config = {
         "gradient-shift": {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" }
+        },
+        "card-sheen": {
+          "0%": { transform: "translateX(-140%) skewX(-18deg)" },
+          "100%": { transform: "translateX(140%) skewX(-18deg)" }
         }
       },
       animation: {
@@ -90,7 +94,8 @@ const config = {
         "auth-float": "auth-float 7s ease-in-out infinite",
         "auth-glow": "auth-glow 3.6s ease-in-out infinite",
         "auth-rise": "auth-rise 0.55s ease-out both",
-        "gradient-shift": "gradient-shift 12s ease infinite"
+        "gradient-shift": "gradient-shift 12s ease infinite",
+        "card-sheen": "card-sheen 1.15s ease-out"
       }
     }
   },
