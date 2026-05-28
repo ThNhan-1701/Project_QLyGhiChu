@@ -23,8 +23,8 @@ export function NoteList({ notes }: NoteListProps) {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">&#272;&#227; ghim</h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {pinned.map((note) => (
-              <NoteCard key={note.id} note={note} />
+            {pinned.map((note, index) => (
+              <NoteCard key={note.id} note={note} index={index} />
             ))}
           </div>
         </section>
@@ -33,8 +33,8 @@ export function NoteList({ notes }: NoteListProps) {
         <h2 className="text-lg font-semibold">T&#7845;t c&#7843; ghi ch&#250;</h2>
         {others.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {others.map((note) => (
-              <NoteCard key={note.id} note={note} />
+            {others.map((note, index) => (
+              <NoteCard key={note.id} note={note} index={index} />
             ))}
           </div>
         ) : (

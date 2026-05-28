@@ -86,6 +86,21 @@ const config = {
         "card-sheen": {
           "0%": { transform: "translateX(-140%) skewX(-18deg)" },
           "100%": { transform: "translateX(140%) skewX(-18deg)" }
+        },
+        "card-pop": {
+          from: { opacity: "0", transform: "translateY(14px) scale(0.98)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" }
+        },
+        "card-orbit": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0) rotate(0deg)" },
+          "50%": { transform: "translate3d(7px, -7px, 0) rotate(8deg)" }
+        },
+        "card-pulse": {
+          "0%, 100%": { opacity: "0.55", transform: "scale(1)" },
+          "50%": { opacity: "0.95", transform: "scale(1.08)" }
+        },
+        "border-spin": {
+          to: { transform: "rotate(360deg)" }
         }
       },
       animation: {
@@ -95,7 +110,11 @@ const config = {
         "auth-glow": "auth-glow 3.6s ease-in-out infinite",
         "auth-rise": "auth-rise 0.55s ease-out both",
         "gradient-shift": "gradient-shift 12s ease infinite",
-        "card-sheen": "card-sheen 1.15s ease-out"
+        "card-sheen": "card-sheen 1.15s ease-out",
+        "card-pop": "card-pop 0.45s ease-out both",
+        "card-orbit": "card-orbit 4.8s ease-in-out infinite",
+        "card-pulse": "card-pulse 3.2s ease-in-out infinite",
+        "border-spin": "border-spin 5s linear infinite"
       }
     }
   },
