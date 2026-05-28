@@ -17,9 +17,9 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="app-shell min-h-screen bg-background">
       <Navbar email={user.email ?? ""} />
-      <main className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8">{children}</main>
+      <main className="page-enter mx-auto w-full max-w-7xl px-4 py-6 md:px-8">{children}</main>
     </div>
   );
 }

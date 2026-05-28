@@ -29,19 +29,21 @@ export function Navbar({ email }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/70 px-4 py-3 shadow-sm shadow-slate-200/40 backdrop-blur-2xl dark:shadow-black/20 sm:px-6">
+    <header className="sticky top-0 z-40 border-b bg-background/72 px-4 py-3 shadow-sm shadow-slate-200/40 backdrop-blur-2xl transition-all duration-300 dark:shadow-black/20 sm:px-6">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
-        <Link className="flex items-center gap-3 font-semibold" href="/dashboard">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 via-cyan-400 to-emerald-400 text-slate-950 shadow-lg shadow-sky-500/20">
-            <NotebookPen className="h-5 w-5" />
+        <Link className="group flex items-center gap-3 font-semibold" href="/dashboard">
+          <span className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 via-cyan-400 to-emerald-400 text-slate-950 shadow-lg shadow-sky-500/20 transition duration-300 group-hover:-translate-y-0.5 group-hover:rotate-3 group-hover:shadow-sky-500/35">
+            <span className="absolute inset-0 rounded-2xl bg-white/30 opacity-0 blur-md transition group-hover:opacity-100" />
+            <NotebookPen className="relative h-5 w-5" />
           </span>
           <span className="leading-tight">
-            <span className="block text-base">NoteApp</span>
+            <span className="block text-base transition group-hover:text-primary">NoteApp</span>
             <span className="hidden text-xs font-normal text-muted-foreground sm:block">Mood board ghi chú cá nhân</span>
           </span>
         </Link>
         <div className="flex items-center gap-2">
-          <Button asChild className="hidden sm:inline-flex">
+          <Button asChild className="hidden shadow-lg shadow-primary/15 sm:inline-flex">
             <Link href="/notes/new">
               <Plus className="mr-2 h-4 w-4" />
               Ghi chú mới
@@ -57,7 +59,9 @@ export function Navbar({ email }: NavbarProps) {
             <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </Button>
-          <span className="hidden max-w-48 truncate text-sm text-muted-foreground lg:inline">{email}</span>
+          <span className="hidden max-w-48 truncate rounded-full border bg-background/55 px-3 py-1 text-sm text-muted-foreground shadow-sm backdrop-blur lg:inline">
+            {email}
+          </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button aria-label="Menu tài khoản" size="icon" variant="outline">
