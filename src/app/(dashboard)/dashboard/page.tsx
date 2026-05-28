@@ -21,13 +21,13 @@ type DashboardPageProps = {
 };
 
 const dailyPrompts = [
-  "Hôm nay có điều gì đáng ghi lại trước khi nó trôi mất?",
-  "Một ý tưởng nhỏ nào có thể giúp ngày mai dễ thở hơn?",
-  "Nếu chỉ hoàn thành một việc hôm nay, đó sẽ là gì?",
-  "Điều gì đang làm bạn thấy có năng lượng nhất?",
-  "Có điều gì bạn muốn phiên bản tương lai của mình đọc lại?",
-  "Một câu nhắc nhở ngắn cho hôm nay là gì?",
-  "Bạn đang muốn biến suy nghĩ nào thành hành động?"
+  "H\u00f4m nay c\u00f3 \u0111i\u1ec1u g\u00ec \u0111\u00e1ng ghi l\u1ea1i tr\u01b0\u1edbc khi n\u00f3 tr\u00f4i m\u1ea5t?",
+  "M\u1ed9t \u00fd t\u01b0\u1edfng nh\u1ecf n\u00e0o c\u00f3 th\u1ec3 gi\u00fap ng\u00e0y mai d\u1ec5 th\u1edf h\u01a1n?",
+  "N\u1ebfu ch\u1ec9 ho\u00e0n th\u00e0nh m\u1ed9t vi\u1ec7c h\u00f4m nay, \u0111\u00f3 s\u1ebd l\u00e0 g\u00ec?",
+  "\u0110i\u1ec1u g\u00ec \u0111ang l\u00e0m b\u1ea1n th\u1ea5y c\u00f3 n\u0103ng l\u01b0\u1ee3ng nh\u1ea5t?",
+  "C\u00f3 \u0111i\u1ec1u g\u00ec b\u1ea1n mu\u1ed1n phi\u00ean b\u1ea3n t\u01b0\u01a1ng lai c\u1ee7a m\u00ecnh \u0111\u1ecdc l\u1ea1i?",
+  "M\u1ed9t c\u00e2u nh\u1eafc nh\u1edf ng\u1eafn cho h\u00f4m nay l\u00e0 g\u00ec?",
+  "B\u1ea1n \u0111ang mu\u1ed1n bi\u1ebfn suy ngh\u0129 n\u00e0o th\u00e0nh h\u00e0nh \u0111\u1ed9ng?"
 ];
 
 function getDailyPrompt() {
