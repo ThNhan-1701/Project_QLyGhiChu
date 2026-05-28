@@ -51,137 +51,126 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const urgentCount = notes.filter((note) => note.mood === "urgent").length;
   const currentPrompt = getDailyPrompt();
   const promptHref = `/notes/new?prompt=${encodeURIComponent(currentPrompt)}`;
-  const statCards = [
-    {
-      label: "T\u1ed5ng ghi ch\u00fa",
-      value: notes.length,
-      icon: FileText,
-      className: "from-sky-400/18 via-cyan-300/12 to-white/70 text-sky-700 dark:from-sky-400/18 dark:via-cyan-400/10 dark:to-slate-950/70 dark:text-sky-200"
-    },
-    {
-      label: "\u0110\u00e3 ghim",
-      value: pinnedCount,
-      icon: Sparkles,
-      className: "from-amber-300/22 via-orange-200/14 to-white/70 text-amber-700 dark:from-amber-400/18 dark:via-orange-400/10 dark:to-slate-950/70 dark:text-amber-200"
-    },
-    {
-      label: "\u00dd t\u01b0\u1edfng",
-      value: ideaCount,
-      icon: Lightbulb,
-      className: "from-violet-400/20 via-fuchsia-300/12 to-white/70 text-violet-700 dark:from-violet-400/18 dark:via-fuchsia-400/10 dark:to-slate-950/70 dark:text-violet-200"
-    },
-    {
-      label: "Tags",
-      value: tags.length,
-      icon: Tags,
-      className: "from-emerald-300/22 via-teal-200/14 to-white/70 text-emerald-700 dark:from-emerald-400/18 dark:via-teal-400/10 dark:to-slate-950/70 dark:text-emerald-200"
-    }
-  ];
 
   return (
-    <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950 p-6 text-white shadow-2xl shadow-sky-500/15 sm:p-8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(56,189,248,0.42),transparent_30%),radial-gradient(circle_at_82%_4%,rgba(217,70,239,0.32),transparent_28%),radial-gradient(circle_at_70%_86%,rgba(16,185,129,0.22),transparent_30%),linear-gradient(135deg,#020617,#111827_48%,#0f172a)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:34px_34px] opacity-35" />
-        <div className="absolute -right-24 -top-24 h-60 w-60 rounded-full bg-cyan-300/20 blur-3xl" />
-        <div className="absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-fuchsia-400/15 blur-3xl" />
-        <div className="absolute right-6 top-6 hidden rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium shadow-lg backdrop-blur sm:block">
+    <div className="space-y-7">
+      <section className="relative overflow-hidden rounded-[2rem] border bg-slate-950 p-6 text-white shadow-2xl shadow-sky-500/10 sm:p-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.38),transparent_30%),radial-gradient(circle_at_78%_0%,rgba(168,85,247,0.34),transparent_28%),linear-gradient(135deg,#020617,#111827_48%,#0f172a)]" />
+        <div className="absolute right-6 top-6 hidden rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur sm:block">
           GenZ workspace
         </div>
-
-        <div className="relative grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
-          <div className="space-y-6">
-            <Badge className="border-white/10 bg-white/10 text-white shadow-lg backdrop-blur">
+        <div className="relative grid gap-6 lg:grid-cols-[1fr_340px] lg:items-end">
+          <div className="space-y-5">
+            <Badge className="border-white/10 bg-white/10 text-white backdrop-blur">
               <Sparkles className="mr-1.5 h-3.5 w-3.5" />
               Mood-driven notes
             </Badge>
-            <div className="space-y-4">
-              <h1 className="max-w-3xl text-balance text-4xl font-black tracking-tight sm:text-5xl">
-                Bi&#7871;n m&#7885;i suy ngh&#297; th&#224;nh m&#7897;t vibe d&#7877; nh&#236;n.
+            <div className="space-y-3">
+              <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
+                Biến mọi suy nghĩ thành một vibe dễ nhìn.
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-slate-200 sm:text-base">
-                Ghi ch&#250; nhanh, ch&#7885;n mood, &#273;&#7893;i personality card v&#224; t&#236;m l&#7841;i &#253; t&#432;&#7903;ng theo c&#225;ch tr&#7921;c quan h&#417;n.
+                Ghi chú nhanh, chọn mood, đổi personality card và tìm lại ý tưởng theo cách trực quan hơn.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="bg-white text-slate-950 shadow-xl shadow-white/10 hover:bg-white/90">
+              <Button asChild size="lg" className="bg-white text-slate-950 hover:bg-white/90">
                 <Link href="/notes/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  T&#7841;o ghi ch&#250; m&#7899;i
+                  Tạo ghi chú mới
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/10 text-white shadow-xl shadow-sky-500/10 hover:bg-white/15 hover:text-white">
+              <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/10 text-white hover:bg-white/15 hover:text-white">
                 <Link href={promptHref}>
                   <Wand2 className="mr-2 h-4 w-4" />
-                  Vi&#7871;t t&#7915; prompt h&#244;m nay
+                  Viết từ prompt hôm nay
                 </Link>
               </Button>
             </div>
           </div>
-
-          <div className="space-y-4">
-            <Card className="border-white/10 bg-white/10 text-white shadow-2xl shadow-black/20 backdrop-blur-xl">
-              <CardContent className="space-y-4 p-5">
-                <div className="flex items-center gap-2 text-sm font-semibold">
-                  <CalendarDays className="h-4 w-4 text-sky-200" />
-                  Daily prompt
-                </div>
-                <p className="text-lg font-semibold leading-7">{currentPrompt}</p>
-                <p className="text-xs leading-5 text-slate-300">
-                  M&#7897;t c&#226;u g&#7907;i m&#7903; nh&#7887; &#273;&#7875; b&#7855;t &#273;&#7847;u ghi ch&#250; m&#224; kh&#244;ng c&#7847;n nh&#236;n m&#224;n h&#236;nh tr&#7889;ng qu&#225; l&#226;u.
-                </p>
-              </CardContent>
-            </Card>
-            <div className="grid grid-cols-3 gap-3 text-xs font-semibold">
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur">Mood</div>
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur">Style</div>
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur">Tags</div>
-            </div>
-          </div>
+          <Card className="border-white/10 bg-white/10 text-white shadow-xl backdrop-blur">
+            <CardContent className="space-y-4 p-5">
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                <CalendarDays className="h-4 w-4 text-sky-200" />
+                Daily prompt
+              </div>
+              <p className="text-lg font-semibold leading-7">{currentPrompt}</p>
+              <p className="text-xs leading-5 text-slate-300">
+                Một câu gợi mở nhỏ để bắt đầu ghi chú mà không cần nhìn màn hình trống quá lâu.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {statCards.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card className={`overflow-hidden border-white/70 bg-gradient-to-br ${stat.className} shadow-lg shadow-slate-200/60 backdrop-blur dark:border-white/10 dark:shadow-black/20`} key={stat.label}>
-              <CardContent className="relative flex items-center justify-between p-5">
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/35 blur-2xl dark:bg-white/10" />
-                <div>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className="text-3xl font-black">{stat.value}</p>
-                </div>
-                <div className="rounded-2xl bg-white/70 p-3 shadow-lg backdrop-blur dark:bg-white/10">
-                  <Icon className="h-5 w-5" />
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+        <Card className="overflow-hidden border-white/70 bg-white/85 shadow-lg shadow-slate-200/60 backdrop-blur dark:border-white/10 dark:bg-card/90 dark:shadow-black/20">
+          <CardContent className="flex items-center justify-between p-5">
+            <div>
+              <p className="text-sm text-muted-foreground">Tổng ghi chú</p>
+              <p className="text-3xl font-bold">{notes.length}</p>
+            </div>
+            <div className="rounded-2xl bg-sky-100 p-3 text-sky-700 dark:bg-sky-950 dark:text-sky-200">
+              <FileText className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="overflow-hidden border-white/70 bg-white/85 shadow-lg shadow-slate-200/60 backdrop-blur dark:border-white/10 dark:bg-card/90 dark:shadow-black/20">
+          <CardContent className="flex items-center justify-between p-5">
+            <div>
+              <p className="text-sm text-muted-foreground">Đã ghim</p>
+              <p className="text-3xl font-bold">{pinnedCount}</p>
+            </div>
+            <div className="rounded-2xl bg-amber-100 p-3 text-amber-700 dark:bg-amber-950 dark:text-amber-200">
+              <Sparkles className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="overflow-hidden border-white/70 bg-white/85 shadow-lg shadow-slate-200/60 backdrop-blur dark:border-white/10 dark:bg-card/90 dark:shadow-black/20">
+          <CardContent className="flex items-center justify-between p-5">
+            <div>
+              <p className="text-sm text-muted-foreground">Ý tưởng</p>
+              <p className="text-3xl font-bold">{ideaCount}</p>
+            </div>
+            <div className="rounded-2xl bg-violet-100 p-3 text-violet-700 dark:bg-violet-950 dark:text-violet-200">
+              <Lightbulb className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="overflow-hidden border-white/70 bg-white/85 shadow-lg shadow-slate-200/60 backdrop-blur dark:border-white/10 dark:bg-card/90 dark:shadow-black/20">
+          <CardContent className="flex items-center justify-between p-5">
+            <div>
+              <p className="text-sm text-muted-foreground">Tags</p>
+              <p className="text-3xl font-bold">{tags.length}</p>
+            </div>
+            <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+              <Tags className="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
-      <section className="space-y-3 rounded-[1.5rem] border bg-card/60 p-4 shadow-lg shadow-slate-200/50 backdrop-blur-xl dark:shadow-black/20">
+      <section className="space-y-3">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-semibold">Vibe board</h2>
-            <p className="text-sm text-muted-foreground">L&#7885;c nhanh theo mood &#273;&#7875; xem &#273;&#250;ng tr&#7841;ng th&#225;i b&#7841;n c&#7847;n.</p>
+            <p className="text-sm text-muted-foreground">Lọc nhanh theo mood để xem đúng trạng thái bạn cần.</p>
           </div>
           {urgentCount > 0 ? (
-            <Badge className="bg-rose-100 text-rose-700 shadow-sm dark:bg-rose-950 dark:text-rose-200">
+            <Badge className="bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-200">
               <Flame className="mr-1 h-3.5 w-3.5" />
-              {urgentCount} c&#7847;n x&#7917; l&#253;
+              {urgentCount} cần xử lý
             </Badge>
           ) : null}
         </div>
-        <div className="flex gap-2 overflow-x-auto rounded-2xl border bg-background/55 p-3 shadow-inner backdrop-blur">
+        <div className="flex gap-2 overflow-x-auto rounded-2xl border bg-card/70 p-3 shadow-sm backdrop-blur">
           {moodOptions.map((mood) => {
             const Icon = mood.icon;
             const active = searchParams.mood === mood.id;
             return (
               <Link
-                className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-                  active ? mood.className : "bg-background/80 hover:bg-muted"
+                className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition ${
+                  active ? mood.className : "bg-background/70 hover:bg-muted"
                 }`}
                 href={`/dashboard?mood=${mood.id}`}
                 key={mood.id}
@@ -206,11 +195,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
             <FileText className="h-10 w-10 text-muted-foreground" />
             <div>
-              <h2 className="font-semibold">Ch&#432;a c&#243; ghi ch&#250; n&#224;o</h2>
-              <p className="text-sm text-muted-foreground">T&#7841;o ghi ch&#250; &#273;&#7847;u ti&#234;n &#273;&#7875; b&#7855;t &#273;&#7847;u x&#226;y mood board c&#7911;a ri&#234;ng b&#7841;n.</p>
+              <h2 className="font-semibold">Chưa có ghi chú nào</h2>
+              <p className="text-sm text-muted-foreground">Tạo ghi chú đầu tiên để bắt đầu xây mood board của riêng bạn.</p>
             </div>
             <Button asChild>
-              <Link href="/notes/new">T&#7841;o ghi ch&#250; m&#7899;i</Link>
+              <Link href="/notes/new">Tạo ghi chú mới</Link>
             </Button>
           </CardContent>
         </Card>
